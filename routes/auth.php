@@ -7,9 +7,13 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\PermissionDeleteController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use Laratrust\Http\Controllers\PermissionsController;
+use Laratrust\Http\Controllers\RolesAssignmentController;
+use Laratrust\Http\Controllers\RolesController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -33,6 +37,13 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    Route::group(['prefix' => 'authorize', 'middleware' => []], function () {
+        Route::resource('/permissions', PermissionsController::class, ['as' => 'laratrust'])->except(['show', 'destroy']);
+        Route::delete('permissions/{id}', PermissionDeleteController::class)->name('laratrust.permissions.destroy');
+        Route::resource('/roles', RolesController::class, ['as' => 'laratrust']);
+        Route::resource('/roles-assignment', RolesAssignmentController::class, ['as' => 'laratrust'])->only(['index', 'edit', 'update']);
+    });
 });
 
 Route::middleware('auth')->group(function () {
@@ -56,4 +67,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    // Roles & Permissions
 });
