@@ -14,9 +14,7 @@
             @csrf
 
             <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+                <x-primary-button>{{ __('Resend Verification Email') }}</x-primary-button>
             </div>
         </form>
 

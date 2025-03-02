@@ -10,16 +10,23 @@
         @csrf
 
         <!-- Email Address -->
-        <div>
+        <div class="mb-3">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="Enter Email" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <div class="mb-3 grid">
+            <x-primary-button>{{ __('Reset Password') }}</x-primary-button>
         </div>
+
+        @if (Route::has('register'))
+            <span>
+                {{ __("Don't have an account?") }}
+                <a class="text-indigo-600 hover:text-indigo-600" href="{{ route('register') }}">
+                    {{ __('Create An Account') }}
+                </a>
+            </span>
+        @endif
     </form>
 </x-guest-layout>
