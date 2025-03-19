@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use AmdadulHaq\Guard\Facades\Guard;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $tables = config('guard.tables');
+        $models = config('guard.models');
+        $pivotTableName = Guard::getPivotTableName(Arr::only($models, ['permission', 'role']));
+
+        Schema::create($tables['permissions'], function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('label')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create($pivotTableName, function (Blueprint $table) use ($tables) {
+            $table->foreignId(Guard::getSingularName($tables['permissions']).'_id')->constrained($tables['permissions'])->cascadeOnDelete();
+            $table->foreignId(Guard::getSingularName($tables['roles']).'_id')->constrained($tables['roles'])->cascadeOnDelete();
+            $table->primary([Guard::getSingularName($tables['permissions']).'_id', Guard::getSingularName($tables['roles']).'_id']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        $tables = config('guard.tables');
+        $models = config('guard.models');
+        $pivotTableName = Guard::getPivotTableName(Arr::only($models, ['role', 'permission']));
+
+        Schema::dropIfExists($tables['permissions']);
+        Schema::dropIfExists($pivotTableName);
+    }
+};
