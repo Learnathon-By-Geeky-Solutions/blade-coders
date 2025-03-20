@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout :title="__('Forgot Password')">
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
     </div>
@@ -12,8 +12,9 @@
         <!-- Email Address -->
         <div class="mb-3">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="Enter Email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-text-input id="email" name="email" type="email" :value="old('email')" required autofocus
+                placeholder="Enter Email" />
+            <x-input-error class="mt-2" :messages="$errors->get('email')" />
         </div>
 
         <div class="mb-3 grid">

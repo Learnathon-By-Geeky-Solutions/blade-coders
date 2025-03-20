@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Password;
@@ -13,7 +14,7 @@ class PasswordResetLinkSendController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(User $user)
+    public function __invoke(User $user): JsonResponse
     {
         abort_if($user->id == auth()->id(), Response::HTTP_FORBIDDEN);
 
@@ -25,13 +26,11 @@ class PasswordResetLinkSendController extends Controller
 
         return $status == Password::RESET_LINK_SENT
             ? response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => __('Password reset link sent for user :id', ['id' => __($user->email)]),
             ])
-            : response()->json(
-                [
-                    'status' => false,
-                ]
-            );
+            : response()->json([
+                'success' => false,
+            ]);
     }
 }

@@ -6,21 +6,24 @@ use AmdadulHaq\Guard\GuardServiceProvider;
 use AmdadulHaq\Guard\Models\Permission;
 use AmdadulHaq\Guard\Models\Role;
 use App\Http\Requests\RoleRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         Gate::authorize('role.viewAny');
 
-        $roles = Role::paginate(config('setting.pagination_limit'));
+        $roles = Role::latest()->paginate(config('setting.pagination_limit'));
 
         return view('backend.roles.index', compact('roles'));
     }
@@ -28,7 +31,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         Gate::authorize('role.create');
 
@@ -40,7 +43,7 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RoleRequest $request)
+    public function store(RoleRequest $request): RedirectResponse
     {
         Gate::authorize('role.create');
 
@@ -58,15 +61,17 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(Role $role): void
     {
         Gate::authorize('role.view');
+
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(Role $role): View
     {
         Gate::authorize('role.update');
 
@@ -78,7 +83,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RoleRequest $request, Role $role)
+    public function update(RoleRequest $request, Role $role): RedirectResponse
     {
         Gate::authorize('role.update');
 
@@ -96,13 +101,13 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): JsonResponse
     {
         Gate::authorize('role.delete');
 
         if ($role->users()->exists()) {
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'message' => __(':name cannot be deleted because it is assigned to users.', ['name' => __('Role')]),
             ]);
         }
@@ -110,7 +115,7 @@ class RoleController extends Controller
         $role->delete();
 
         return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => __(':name deleted successfully!', ['name' => __('Role')]),
         ]);
     }

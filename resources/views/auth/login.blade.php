@@ -1,6 +1,6 @@
-<x-guest-layout>
-     <!-- Session Status -->
-     <x-auth-session-status class="mb-4" :status="session('status')" />
+<x-guest-layout :title="__('Login')">
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -8,21 +8,25 @@
         <!-- username -->
         <div class="mb-3">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Enter Email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-text-input id="email" name="email" type="email" :value="old('email')" required autofocus
+                autocomplete="username" placeholder="Enter Email" />
+            <x-input-error class="mt-2" :messages="$errors->get('email')" />
         </div>
         <!-- password -->
         <div class="mb-5">
             <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" type="password" name="password" :value="old('password')" required autofocus autocomplete="password" placeholder="Enter Password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-text-input id="password" name="password" type="password" :value="old('password')" required autofocus
+                autocomplete="password" placeholder="Enter Password" />
+            <x-input-error class="mt-2" :messages="$errors->get('password')" />
         </div>
         <!-- checkbox -->
-        <div class="lg:flex justify-between items-center mb-4">
+        <div class="mb-4 items-center justify-between lg:flex">
             <div class="flex items-center">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="w-4 h-4 text-indigo-600 bg-white border-gray-300 rounded focus:ring-indigo-600 focus:outline-none focus:ring-2" name="remember">
-                    <span class="inline-block ms-2">{{ __('Remember me') }}</span>
+                <label class="inline-flex items-center" for="remember_me">
+                    <input
+                        class="h-4 w-4 rounded border-gray-300 bg-white text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        id="remember_me" name="remember" type="checkbox">
+                    <span class="ms-2 inline-block">{{ __('Remember me') }}</span>
                 </label>
             </div>
         </div>
@@ -32,7 +36,7 @@
                 <x-primary-button>{{ __('Log in') }}</x-primary-button>
             </div>
 
-            <div class="flex justify-between mt-4">
+            <div class="mt-4 flex justify-between">
                 @if (Route::has('register'))
                     <div class="mb-2">
                         <a class="text-indigo-600 hover:text-indigo-600" href="{{ route('register') }}">

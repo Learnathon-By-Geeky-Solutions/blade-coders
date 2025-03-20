@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Currency\StoreRequest;
-use App\Http\Requests\Currency\UpdateRequest;
+use App\Http\Requests\CurrencyRequest;
 use App\Models\Currency;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class CurrencyController extends Controller
 {
@@ -22,7 +18,7 @@ class CurrencyController extends Controller
     {
         Gate::authorize('currency.viewAny');
 
-        $currencies = Currency::paginate(config('setting.pagination_limit'));
+        $currencies = Currency::latest()->paginate(config('setting.pagination_limit'));
 
         return view('backend.currencies.index', compact('currencies'));
     }
@@ -30,7 +26,7 @@ class CurrencyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         Gate::authorize('currency.create');
     }
@@ -38,7 +34,7 @@ class CurrencyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(CurrencyRequest $request): JsonResponse
     {
         Gate::authorize('currency.create');
 
@@ -46,25 +42,25 @@ class CurrencyController extends Controller
 
         toastr()->success('Currency created successfully');
 
-        return Redirect::route('currencies.index');
+        return response()->json(['success' => true]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Currency $currency): JsonResponse
+    public function show(Currency $currency): void
     {
-        if (! request()->ajax()) {
-            Gate::authorize('currency.view');
-            abort(Response::HTTP_NOT_FOUND);
-        }
+        Gate::authorize('currency.view');
 
-        if (! auth()->user()->can('currency.view')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized request',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Currency $currency): JsonResponse
+    {
+        Gate::authorize('currency.update');
 
         return response()->json([
             'success' => true,
@@ -73,66 +69,44 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Currency $currency)
-    {
-        Gate::authorize('currency.update');
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, Currency $currency): RedirectResponse
+    public function update(CurrencyRequest $request, Currency $currency): JsonResponse
     {
-        abort_if(! $currency->is_created, Response::HTTP_FORBIDDEN);
-
         Gate::authorize('currency.update');
 
         $currency->update($request->validated());
 
         toastr()->success('Currency info updated');
 
-        return Redirect::route('currencies.index');
+        return response()->json(['success' => true]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Currency $currency)
+    public function destroy(Currency $currency): JsonResponse
     {
-        abort_if(! $currency->is_created, Response::HTTP_FORBIDDEN);
-
         Gate::authorize('currency.delete');
 
         $currency->delete();
 
         return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => __(':name deleted successfully!', ['name' => __('Currency')]),
         ]);
     }
 
-    public function statusUpdate(Request $request, Currency $currency): JsonResponse
+    public function status(Request $request, Currency $currency): JsonResponse
     {
-        if (! request()->ajax()) {
-            Gate::authorize('language.update');
-        }
-
-        if (! auth()->user()->can('currency.update')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        Gate::authorize('language.update');
 
         $currency->update(['is_active' => $request->boolean('status')]);
 
         toastr()->success(__(':name updated successfully!', ['name' => __('Status')]));
 
         return response()->json([
-            'status' => true,
-            'message' => __(':name updated successfully!', ['name' => __('Status')]),
+            'success' => true,
         ]);
     }
 }

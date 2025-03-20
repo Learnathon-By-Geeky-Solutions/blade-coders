@@ -20,12 +20,14 @@ class LanguageSeeder extends Seeder
             [
                 'locale' => 'en',
                 'name' => 'English',
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'locale' => 'bn',
                 'name' => 'Bangla',
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

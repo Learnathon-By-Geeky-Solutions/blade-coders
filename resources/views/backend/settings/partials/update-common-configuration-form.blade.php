@@ -10,6 +10,44 @@
             <div class="mb-6 inline-flex w-full flex-col gap-3 md:flex md:flex-row md:items-center">
                 <div class="flex-1 font-semibold text-gray-800">
                     <h5 class="mb-0">
+                        <x-input-label for="email_verification" :value="__('Email Verification')" />
+                    </h5>
+                </div>
+                <div class="flex-[3]">
+                    <div>
+                        <label>
+                            <x-toggle-input name="email_verification" :checked="$settings['email_verification']" />
+                        </label>
+                    </div>
+                    <x-input-error class="mt-2" :messages="$errors->get('email_verification')" />
+                </div>
+            </div>
+
+            <div class="mb-6 inline-flex w-full flex-col gap-3 md:flex md:flex-row md:items-center">
+                <div class="flex-1 font-semibold text-gray-800">
+                    <h5 class="mb-0">
+                        <x-input-label for="default_role" :value="__('Default Role')" />
+                    </h5>
+                </div>
+                <div class="flex-[3]">
+                    <div class="flex items-center">
+                        <select
+                            class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                            id="default_role" name="default_role" required>
+                            <option value="" selected disabled>{{ __('Select User Default Role') }}</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" @selected(old('default_role', $settings['default_role']) == $role->id)>
+                                    {{ $role->label ?? $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <x-input-error class="mt-2" :messages="$errors->get('default_role')" />
+                </div>
+            </div>
+
+            <div class="mb-6 inline-flex w-full flex-col gap-3 md:flex md:flex-row md:items-center">
+                <div class="flex-1 font-semibold text-gray-800">
+                    <h5 class="mb-0">
                         <x-input-label for="pagination_limit" :value="__('Pagination Limit')" />
                     </h5>
                 </div>
@@ -17,7 +55,7 @@
                     <div class="flex items-center">
                         <x-text-input id="pagination_limit" name="pagination_limit" type="number" :value="old('pagination_limit', $settings['pagination_limit'])" />
                     </div>
-                    <x-input-error class="mt-2" :messages="$errors->get('pagination')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('pagination_limit')" />
                 </div>
             </div>
 

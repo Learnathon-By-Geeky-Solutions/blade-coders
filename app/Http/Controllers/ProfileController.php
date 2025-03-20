@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Services\ImageUploadService;
+use App\Services\MediaUploadService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     public function __construct(
-        private readonly ImageUploadService $imageUploadService
+        private readonly MediaUploadService $mediaUploadService
     ) {
         //
     }
@@ -48,10 +48,10 @@ class ProfileController extends Controller
 
         if ($request->has('avatar')) {
             if ($user->avatar) {
-                $this->imageUploadService->deleteImage($user->avatar);
+                $this->mediaUploadService->deleteMedia($user->avatar);
             }
 
-            $this->imageUploadService->uploadSingle($request->file('avatar'), $user, 'avatars', 'avatar');
+            $this->mediaUploadService->uploadSingle($request->file('avatar'), $user, 'avatars', 'avatar');
         }
 
         $request->user()->save();

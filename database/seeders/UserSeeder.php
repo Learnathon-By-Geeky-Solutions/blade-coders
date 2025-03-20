@@ -22,10 +22,24 @@ class UserSeeder extends Seeder
         $items = [
             'user' => ['viewAny', 'view', 'create', 'update', 'delete'],
             'role' => ['viewAny', 'view', 'create', 'update', 'delete'],
-            'blog' => ['viewAny', 'view', 'create', 'update', 'delete'],
             'language' => ['viewAny', 'view', 'create', 'update', 'delete'],
             'setting' => ['view', 'update'],
             'currency' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'mailbox' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'service' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'benefit' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'ability-support' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'our-process' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'faq_category' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'faq' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'parent_review' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'page' => ['viewAny', 'create', 'update', 'delete'],
+            'blog_category' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'blog' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'resource' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'event-speaker' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'event-type' => ['viewAny', 'view', 'create', 'update', 'delete'],
+            'event' => ['viewAny', 'view', 'create', 'update', 'delete'],
         ];
 
         $role = Role::create([

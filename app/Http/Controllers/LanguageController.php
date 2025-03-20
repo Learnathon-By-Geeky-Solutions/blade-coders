@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LanguageRequest;
 use App\Models\Language;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class LanguageController extends Controller
 {
@@ -21,7 +21,7 @@ class LanguageController extends Controller
     {
         Gate::authorize('language.viewAny');
 
-        $languages = Language::paginate(config('setting.pagination_limit', 10));
+        $languages = Language::latest()->paginate(config('setting.pagination_limit', 10));
 
         return view('backend.languages.index', compact('languages'));
     }
@@ -29,7 +29,7 @@ class LanguageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         Gate::authorize('language.create');
 
@@ -41,17 +41,9 @@ class LanguageController extends Controller
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(LanguageRequest $request): JsonResponse
     {
         Gate::authorize('language.create');
-
-        $request->merge(['is_active' => $request->has('is_active')]);
-
-        $validatedData = $request->validate([
-            'locale' => ['required', 'string', 'min:2', 'max:2', 'unique:languages,locale'],
-            'name' => ['required', 'string', 'unique:languages,name'],
-            'is_active' => ['boolean'],
-        ]);
 
         $locale = $request->input('locale');
         $baseLocale = config('setting.default_locale', 'en');
@@ -64,29 +56,29 @@ class LanguageController extends Controller
             File::put($newFile, json_encode($baseTranslations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         }
 
-        Language::create($validatedData);
+        Language::create($request->validated());
 
         toastr()->success(__(':name created successfully!', ['name' => __('Language')]));
 
-        return Redirect::route('languages.index');
+        return response()->json(['success' => true]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Language $language): JsonResponse
+    public function show(Language $language): void
     {
-        if (! request()->ajax()) {
-            Gate::authorize('language.view');
-            abort(Response::HTTP_NOT_FOUND);
-        }
+        Gate::authorize('language.view');
 
-        if (! auth()->user()->can('language.view')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized request',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Language $language): JsonResponse
+    {
+        Gate::authorize('language.update');
 
         return response()->json([
             'success' => true,
@@ -95,35 +87,17 @@ class LanguageController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Language $language)
-    {
-        Gate::authorize('language.update');
-
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Language $language)
+    public function update(LanguageRequest $request, Language $language): JsonResponse
     {
         Gate::authorize('language.update');
 
-        $request->merge(['is_active' => $request->has('is_active')]);
-
-        $validatedData = $request->validate([
-            'locale' => ['required', 'string', 'min:2', 'max:2', 'unique:languages,locale,'.$language->id],
-            'name' => ['required', 'string', 'unique:languages,name,'.$language->id],
-            'is_active' => ['boolean'],
-        ]);
-
-        $language->update($validatedData);
+        $language->update($request->validated());
 
         toastr()->success(__(':name updated successfully!', ['name' => __('Language')]));
 
-        return Redirect::route('languages.index');
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -131,46 +105,31 @@ class LanguageController extends Controller
      */
     public function destroy(Language $language): JsonResponse
     {
-        if (! request()->ajax()) {
-            Gate::authorize('language.delete');
-        }
-
-        if (! auth()->user()->can('language.delete')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        Gate::authorize('language.delete');
 
         $language->delete();
 
         return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => __(':name deleted successfully!', ['name' => __('Language')]),
         ]);
     }
 
-    public function statusUpdate(Request $request, Language $language): JsonResponse
+    public function status(Request $request, Language $language): JsonResponse
     {
-        if (! request()->ajax()) {
-            Gate::authorize('language.update');
-        }
+        Gate::authorize('language.update');
 
-        if (! auth()->user()->can('language.update')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized',
-            ], Response::HTTP_UNAUTHORIZED);
+        if ($language->locale === config('app.locale') && ! $request->boolean('status')) {
+            toastr()->error(__("Default :name can't inactivated.", ['name' => __('Language')]));
+
+            return response()->json(['success' => false]);
         }
 
         $language->update(['is_active' => $request->boolean('status')]);
 
         toastr()->success(__(':name updated successfully!', ['name' => __('Status')]));
 
-        return response()->json([
-            'status' => true,
-            'message' => __(':name updated successfully!', ['name' => __('Status')]),
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**

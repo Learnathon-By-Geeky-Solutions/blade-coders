@@ -1,6 +1,6 @@
-<x-backend-layout>
+<x-backend-layout :title="__('Add Role')">
     <div class="mb-4 flex items-center justify-between border-b border-gray-300 pb-4">
-        <h1 class="inline-block text-xl font-semibold leading-6">{{ __('Create Role') }}</h1>
+        <h1 class="inline-block text-xl font-semibold leading-6">{{ __('Add Role') }}</h1>
         <x-secondary-link href="{{ route('roles.index') }}">{{ __('Back') }}</x-secondary-link>
     </div>
 
@@ -9,18 +9,18 @@
         <div class="grid grid-cols-2 gap-4">
             <div class="mb-3">
                 <x-text-input id="name" name="name" type="text" :value="old('name')" required autofocus
-                    autocomplete="username" placeholder="Enter Name *" required />
+                    autocomplete="username" :placeholder="__('Enter Name')" required />
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
             </div>
             <div class="mb-5">
-                <x-text-input id="label" name="label" type="text" :value="old('label')" required autofocus
+                <x-text-input id="label" name="label" type="text" :value="old('label')" autofocus
                     autocomplete="label" placeholder="Enter Label" />
                 <x-input-error class="mt-2" :messages="$errors->get('label')" />
             </div>
         </div>
 
         <h2 class="mb-3 text-xl">{{ __('Permissions') }}</h2>
-        <div class="mb-4 grid grid-cols-3 gap-4">
+        <div class="mb-4 grid grid-cols-5 gap-4">
             @foreach ($permissions as $key => $permission)
                 <div class="rounded-lg border bg-white p-4 shadow">
                     <h3 class="mb-3 text-lg">{{ $key }}</h3>

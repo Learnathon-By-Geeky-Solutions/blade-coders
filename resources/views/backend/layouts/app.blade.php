@@ -1,3 +1,5 @@
+@props(['title'])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -6,20 +8,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? '' }} :: {{ config('app.name', 'Laravel') }}</title>
+
+    @if (config('setting.website_favicon'))
+        <link type="image/x-icon" href="{{ Storage::url(config('setting.website_favicon')) }}" rel="shortcut icon">
+    @endif
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"rel="stylesheet" />
 
     <link href="{{ asset('assets/libs/simplebar/dist/simplebar.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/libs/apexcharts/dist/apexcharts.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet">
+    @stack('styles')
+
+    <!-- Font Awesome -->
+    <link href="{{ asset('assets/font-awesome/font-awesome.min.css') }}" rel="stylesheet">
+
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/css/components/collapse.css', 'resources/css/components/dropdown.css', 'resources/css/components/nav.css', 'resources/css/components/navbar.css', 'resources/css/components/offcanvas.css', 'resources/css/components/prism.css', 'resources/css/components/toast.css', 'resources/css/components/tooltips.css', 'resources/js/app.js'])
+    @vite([
+        'resources/css/app.css',
+        'resources/css/components/collapse.css',
+        'resources/css/components/dropdown.css',
+        'resources/css/components/modal.css',
+        'resources/css/components/nav.css',
+        'resources/css/components/navbar.css',
+        'resources/css/components/offcanvas.css',
+        'resources/css/components/prism.css',
+        'resources/css/components/toast.css',
+        'resources/css/components/tooltips.css',
+        'resources/css/components/rating-star.css',
+        'resources/js/app.js'
+    ])
 
     @routes
 </head>
@@ -54,6 +77,7 @@
     <script src="{{ asset('assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/theme.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
     @stack('scripts')
 </body>
 

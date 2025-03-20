@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use AmdadulHaq\Guard\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -42,7 +43,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        $role = Role::find(config('setting.default_role'));
+
+        if ($role) {
+            $user->assignRole($role);
+        }
+
+        if (config('setting.email_verification')) {
+            event(new Registered($user));
+        }
 
         Auth::login($user);
 

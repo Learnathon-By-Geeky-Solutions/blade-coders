@@ -1,4 +1,4 @@
-<x-backend-layout>
+<x-backend-layout :title="__('Dashboard')">
     <div class="-m-6 mb-3 flex items-center justify-between bg-indigo-600 px-8 pb-16 pt-10 lg:pt-14">
         <h1 class="text-xl text-white">{{ __('Dashboard') }}</h1>
         <a class="btn border-gray-600 bg-white text-gray-800 hover:border-gray-200 hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 active:border-gray-200 active:bg-gray-100 active:text-gray-800"
@@ -139,7 +139,8 @@
                                                 src="./assets/images/avatar/avatar-1.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                2+</div>
+                                                2+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -174,7 +175,8 @@
                                                 src="./assets/images/avatar/avatar-6.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                2+</div>
+                                                2+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -210,7 +212,8 @@
                                                 src="./assets/images/avatar/avatar-9.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                5+</div>
+                                                5+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -246,7 +249,8 @@
                                                 src="./assets/images/avatar/avatar-12.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                5+</div>
+                                                5+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -282,7 +286,8 @@
                                                 src="./assets/images/avatar/avatar-12.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                5+</div>
+                                                5+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -318,7 +323,8 @@
                                                 src="./assets/images/avatar/avatar-12.jpg" alt="Profile image" />
                                             <div
                                                 class="relative inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-indigo-600 text-sm text-white">
-                                                4+</div>
+                                                4+
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="border-b border-gray-300 px-6 py-3 pe-6 text-left">
@@ -579,7 +585,8 @@
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">Front End
-                                    Developer</td>
+                                    Developer
+                                </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">3 May, 2023</td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">
                                     <div class="dropdown leading-4">
@@ -642,7 +649,8 @@
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">Full- Stack
-                                    Developer</td>
+                                    Developer
+                                </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">Yesterday</td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">
                                     <div class="dropdown leading-4">
@@ -735,7 +743,8 @@
                                     </div>
                                 </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">Front End
-                                    Developer</td>
+                                    Developer
+                                </td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">3 May, 2023</td>
                                 <td class="border-b border-gray-300 px-6 py-3 text-left font-medium">
                                     <div class="dropdown leading-4">

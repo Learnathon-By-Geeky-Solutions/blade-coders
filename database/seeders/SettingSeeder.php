@@ -36,6 +36,30 @@ class SettingSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'key' => 'website_logo',
+                'value' => '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'website_favicon',
+                'value' => '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'email_verification',
+                'value' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'default_role',
+                'value' => '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'key' => 'pagination_limit',
                 'value' => 10,
                 'created_at' => now(),

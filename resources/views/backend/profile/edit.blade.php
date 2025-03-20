@@ -1,4 +1,4 @@
-<x-backend-layout>
+<x-backend-layout :title="__('Edit Profile')">
     <x-slot name="header">
         <h1 class="inline-block text-xl font-semibold leading-6">
             {{ __('Profile') }}

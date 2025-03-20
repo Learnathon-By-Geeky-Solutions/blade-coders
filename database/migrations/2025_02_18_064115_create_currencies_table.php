@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('label');
-            $table->boolean('is_active')->default(true);
-            $table->boolean('is_created')->default(true)->comment('Indicates if manually created');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

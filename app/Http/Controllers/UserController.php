@@ -6,11 +6,10 @@ use AmdadulHaq\Guard\Models\Role;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +24,7 @@ class UserController extends Controller
 
         $users = User::select(['id', 'name', 'email', 'email_verified_at', 'created_at'])
             ->with('roles:id,name,label')
+            ->latest()
             ->paginate(config('setting.pagination_limit'));
 
         $roles = Role::select(['id', 'name', 'label'])->get();
@@ -35,9 +35,11 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         Gate::authorize('user.create');
+
+        //
     }
 
     /**
@@ -46,7 +48,7 @@ class UserController extends Controller
      * @throws \Exception
      * @throws \Throwable
      */
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(StoreRequest $request): JsonResponse
     {
         Gate::authorize('user.create');
 
@@ -54,67 +56,70 @@ class UserController extends Controller
             $user = new User;
             $user->fill($request->validated())->save();
 
-            if ($request->filled('role')) {
-                $user->roles()->attach($request->role);
+            if ($request->filled('roles')) {
+                $user->roles()->attach($request->roles);
+            }
+
+            if ($request->input('welcome_email')) {
+                event(new Registered($user));
             }
 
             toastr()->success(__(':name created successfully!', ['name' => __('User')]));
         });
 
-        return Redirect::route('users.index');
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user): JsonResponse
+    public function show(User $user): void
     {
-        if (! request()->ajax()) {
-            Gate::authorize('user.view');
-            abort(Response::HTTP_NOT_FOUND);
-        }
+        Gate::authorize('user.view');
 
-        if (! $user->can('user.view')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized request',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        return response()->json([
-            'success' => true,
-            'user' => $user->load('roles'),
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user): JsonResponse
     {
         Gate::authorize('user.update');
+
+        $data = $user->load('roles:id,name')->toArray();
+        $data['roles'] = $user->roles->pluck('name', 'id');
+
+        return response()->json([
+            'success' => true,
+            'user' => $data,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, User $user): RedirectResponse
+    public function update(UpdateRequest $request, User $user): JsonResponse
     {
         Gate::authorize('user.update');
 
         $user->update($request->validated());
 
-        $user->roles()->sync($request->role);
+        $user->roles()->sync($request->roles);
 
         toastr()->success(__(':name updated successfully!', ['name' => __('User')]));
 
-        return Redirect::route('users.index');
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
         abort_if($user->id == auth()->id(), Response::HTTP_FORBIDDEN);
 
@@ -125,7 +130,7 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => __(':name deleted successfully!', ['name' => __('User')]),
         ]);
     }

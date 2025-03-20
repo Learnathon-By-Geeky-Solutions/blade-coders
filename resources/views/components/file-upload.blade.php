@@ -1,0 +1,3 @@
+@props(['disabled' => false, 'required' => false])
+
+<input @disabled($disabled) @required($required) type="file" {{ $attributes->merge(['class' => 'block w-full text-gray-500 file:mr-4 file:rounded file:border-0 file:bg-orange-50 file:py-[11px] file:px-3 file:text-sm file:font-semibold file:text-orange-700 hover:file:bg-orange-100 dark:file:bg-orange-600 dark:file:text-orange-100 dark:hover:file:bg-orange-500 border border-gray-300 rounded focus:ring-indigo-600 focus:border-indigo-600 disabled:opacity-50 disabled:pointer-events-none placeholder:text-base cursor-pointer focus:outline-none']) }}>

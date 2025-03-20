@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements /* MustVerifyEmail, */ UserContract
+class User extends Authenticatable implements MustVerifyEmail, UserContract
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasRoles, Notifiable;
@@ -57,6 +57,6 @@ class User extends Authenticatable implements /* MustVerifyEmail, */ UserContrac
 
     public function avatar(): MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Media::class, 'mediable');
     }
 }
