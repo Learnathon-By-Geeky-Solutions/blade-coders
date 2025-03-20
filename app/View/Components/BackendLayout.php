@@ -13,7 +13,7 @@ class BackendLayout extends Component
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
