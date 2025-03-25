@@ -18,6 +18,7 @@ use App\Http\Controllers\OurProcessController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParentReviewController;
 use App\Http\Controllers\PasswordResetLinkSendController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\RoleController;
@@ -47,6 +48,7 @@ Route::middleware($middlewares)->group(function () {
     Route::resource('our-processes', OurProcessController::class);
 
     Route::resource('services', ServiceController::class);
+    Route::resource('products', ProductController::class);
 
     Route::patch('event-speakers/status/{eventSpeaker}', [EventSpeakerController::class, 'status'])->name('event-speakers.status');
     Route::resource('event-speakers', EventSpeakerController::class);
