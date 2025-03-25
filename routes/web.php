@@ -24,6 +24,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SuperServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,7 @@ Route::middleware($middlewares)->group(function () {
 
     Route::resource('services', ServiceController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('superservices', SuperServiceController::class);
 
     Route::patch('event-speakers/status/{eventSpeaker}', [EventSpeakerController::class, 'status'])->name('event-speakers.status');
     Route::resource('event-speakers', EventSpeakerController::class);
