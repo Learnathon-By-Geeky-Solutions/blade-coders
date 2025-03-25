@@ -48,6 +48,7 @@ Route::middleware($middlewares)->group(function () {
     Route::patch('our-processes/status/{ourProcess}', [OurProcessController::class, 'status'])->name('our-processes.status');
     Route::resource('our-processes', OurProcessController::class);
 
+    // start from
     Route::resource('services', ServiceController::class);
     Route::resource('products', ProductController::class);
     Route::resource('superservices', SuperServiceController::class);
